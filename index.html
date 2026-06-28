@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 暑假任務計劃</title>
+<style>
+  :root{
+    --paper:#FFF8EC;
+    --paper-dim:#F7EFDD;
+    --ink:#2B2B2B;
+    --ink-soft:#6b6258;
+    --teal:#3D7068;
+    --teal-deep:#2A4F49;
+    --fire:#E8633D;
+    --fire-soft:#FBDFD3;
+    --grape:#6B5B95;
+    --grape-soft:#E8E2F2;
+    --gold:#D4A017;
+    --gold-soft:#FBEFC9;
+    --line:#E4D9C2;
+    --white:#FFFFFF;
+    --shadow: 0 2px 0 rgba(43,43,43,0.08);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family: 'Avenir Next', 'Segoe UI', -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .display{
+    font-family: 'Baloo 2', 'Arial Rounded MT Bold', 'PingFang TC', sans-serif;
+    font-weight:800;
+    letter-spacing:-0.01em;
+  }
+  #app{max-width:900px;margin:0 auto;padding:18px 16px 60px;}
+
+  /* Header */
+  .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;}
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand-mark{
+    width:40px;height:40px;border-radius:12px;
+    background:linear-gradient(135deg,var(--fire),var(--grape));
+    display:flex;align-items:center;justify-content:center;
+    font-size:20px;flex-shrink:0;
+  }
+  .brand h1{font-size:19px;margin:0;line-height:1.15;}
+  .brand p{margin:1px 0 0;font-size:12px;color:var(--ink-soft);}
+
+  .tabs{display:flex;gap:6px;background:var(--paper-dim);padding:4px;border-radius:14px;}
+  .tab-btn{
+    border:none;background:transparent;padding:8px 14px;border-radius:10px;
+    font-size:13px;font-weight:700;color:var(--ink-soft);cursor:pointer;
+    font-family:inherit;transition:all .15s;
+  }
+  .tab-btn.active{background:var(--white);color:var(--teal-deep);box-shadow:var(--shadow);}
+
+  .view{display:none;}
+  .view.active{display:block;}
+
+  /* ===== TODAY VIEW ===== */
+  .date-nav{
+    display:flex;align-items:center;justify-content:space-between;
+    background:var(--white);border-radius:18px;padding:10px 14px;margin-bottom:14px;
+    box-shadow:var(--shadow);
+  }
+  .date-nav button{
+    border:none;background:var(--paper-dim);width:34px;height:34px;border-radius:10px;
+    font-size:16px;cursor:pointer;color:var(--teal-deep);font-weight:800;
+  }
+  .date-label{text-align:center;}
+  .date-label .big{font-size:16px;font-weight:800;}
+  .date-label .small{font-size:11px;color:var(--ink-soft);}
+  .daytype-pill{
+    display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;
+    border-radius:999px;margin-top:4px;
+  }
+  .pill-camp{background:var(--fire-soft);color:var(--fire);}
+  .pill-self{background:var(--grape-soft);color:var(--grape);}
+  .pill-travel{background:var(--teal);color:var(--white);}
+  .pill-weekend{background:var(--paper-dim);color:var(--ink-soft);}
+  .pill-bg39{background:var(--gold-soft);color:#8a6a00;}
+
+  .gauge-card{
+    background:var(--white);border-radius:22px;padding:22px 18px;margin-bottom:14px;
+    box-shadow:var(--shadow);text-align:center;
+  }
+  .gauge-wrap{position:relative;width:160px;height:160px;margin:0 auto 8px;}
+  .gauge-center{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    text-align:center;
+  }
+  .gauge-center .mins{font-size:30px;font-weight:800;color:var(--fire);font-family:'Baloo 2','Arial Rounded MT Bold',sans-serif;}
+  .gauge-center .label{font-size:11px;color:var(--ink-soft);font-weight:700;}
+  .gauge-sub{font-size:13px;color:var(--ink-soft);margin-top:2px;}
+
+  .task-section-title{
+    font-size:13px;font-weight:800;color:var(--teal-deep);margin:18px 0 8px;
+    display:flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:.03em;
+  }
+  .task-list{display:flex;flex-direction:column;gap:8px;}
+  .task-item{
+    background:var(--white);border-radius:16px;padding:13px 14px;
+    display:flex;align-items:center;gap:12px;box-shadow:var(--shadow);
+    cursor:pointer;border:2px solid transparent;transition:all .15s;
+  }
+  .task-item.done{border-color:var(--teal);background:#F1F8F6;}
+  .task-check{
+    width:26px;height:26px;border-radius:50%;border:2.5px solid var(--line);
+    flex-shrink:0;display:flex;align-items:center;justify-content:center;
+    font-size:14px;color:transparent;transition:all .15s;
+  }
+  .task-item.done .task-check{background:var(--teal);border-color:var(--teal);color:white;}
+  .task-text{flex:1;}
+  .task-text .t-title{font-size:14px;font-weight:700;}
+  .task-text .t-sub{font-size:11.5px;color:var(--ink-soft);margin-top:1px;}
+  .task-mins{font-size:12px;font-weight:800;color:var(--fire);white-space:nowrap;}
+
+  .cube-card{
+    background:var(--gold-soft);border-radius:16px;padding:13px 14px;margin-top:10px;
+    border:2px solid transparent;cursor:pointer;transition:all .15s;
+  }
+  .cube-card.done{border-color:var(--gold);}
+  .cube-row{display:flex;align-items:center;gap:12px;}
+  .cube-icon{font-size:22px;flex-shrink:0;}
+  .cube-text{flex:1;}
+  .cube-card #cubeCheck{width:26px;height:26px;border-radius:50%;border:2.5px solid #e6c878;
+    flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;color:transparent;}
+  .cube-card.done #cubeCheck{background:var(--gold);border-color:var(--gold);color:white;}
+
+  .freeform-box{
+    background:var(--grape-soft);border-radius:16px;padding:14px;margin-top:10px;
+  }
+  .freeform-box label{font-size:12px;font-weight:800;color:var(--grape);display:block;margin-bottom:6px;}
+  .freeform-box textarea{
+    width:100%;border:1.5px solid #d8cdec;border-radius:10px;padding:8px 10px;
+    font-family:inherit;font-size:13px;resize:vertical;min-height:50px;background:white;
+  }
+
+  .streak-bar{
+    display:flex;gap:4px;margin-top:14px;justify-content:center;
+  }
+  .streak-dot{width:9px;height:9px;border-radius:50%;background:var(--line);}
+  .streak-dot.on{background:var(--gold);}
+
+  /* ===== WEEK / CALENDAR VIEW ===== */
+  .week-block{
+    background:var(--white);border-radius:18px;margin-bottom:12px;overflow:hidden;
+    box-shadow:var(--shadow);
+  }
+  .week-head{
+    padding:10px 16px;font-size:13px;font-weight:800;color:white;
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .week-head .wlabel{font-size:11px;font-weight:600;opacity:.9;}
+  .week-rows{padding:6px 10px 10px;}
+  .day-row{
+    display:flex;align-items:center;gap:10px;padding:8px 6px;border-bottom:1px solid var(--paper-dim);
+    cursor:pointer;
+  }
+  .day-row:last-child{border-bottom:none;}
+  .day-row:hover{background:var(--paper-dim);border-radius:10px;}
+  .day-date{width:54px;font-size:12px;font-weight:800;color:var(--ink-soft);flex-shrink:0;}
+  .day-note{flex:1;font-size:12.5px;color:var(--ink);}
+  .day-note .sub{color:var(--ink-soft);font-size:11px;}
+  .day-status{width:60px;text-align:right;font-size:11px;font-weight:700;flex-shrink:0;}
+  .status-done{color:var(--teal);}
+  .status-partial{color:var(--gold);}
+  .status-none{color:#cfc4ac;}
+
+  /* ===== BG39 VIEW ===== */
+  .bg39-hero{
+    background:linear-gradient(135deg,var(--grape),#4a3d6e);color:white;
+    border-radius:20px;padding:20px;margin-bottom:16px;
+  }
+  .bg39-hero h2{margin:0 0 4px;font-size:18px;}
+  .bg39-hero p{margin:0;font-size:13px;opacity:.9;line-height:1.5;}
+  .deadline-track{
+    display:flex;gap:6px;margin-top:14px;
+  }
+  .dl-stage{flex:1;background:rgba(255,255,255,0.15);border-radius:10px;padding:8px;text-align:center;}
+  .dl-stage.active{background:rgba(255,255,255,0.35);}
+  .dl-stage .dl-date{font-size:11px;font-weight:800;}
+  .dl-stage .dl-name{font-size:10px;opacity:.85;margin-top:2px;}
+
+  .idea-card{
+    background:var(--white);border-radius:16px;padding:14px;margin-bottom:10px;box-shadow:var(--shadow);
+  }
+  .idea-card input[type=text]{
+    width:100%;border:none;font-size:14px;font-weight:700;font-family:inherit;
+    border-bottom:2px solid var(--paper-dim);padding-bottom:6px;margin-bottom:8px;background:transparent;
+  }
+  .idea-card input[type=text]:focus{outline:none;border-color:var(--grape);}
+  .idea-card textarea{
+    width:100%;border:1px solid var(--line);border-radius:10px;padding:8px;font-family:inherit;
+    font-size:12.5px;min-height:40px;resize:vertical;
+  }
+  .idea-rating{display:flex;gap:8px;margin-top:8px;align-items:center;}
+  .idea-rating span{font-size:11px;color:var(--ink-soft);font-weight:700;}
+  .star-row{display:flex;gap:3px;}
+  .star{font-size:16px;cursor:pointer;color:#ddd;}
+  .star.filled{color:var(--gold);}
+  .selected-toggle{
+    margin-top:10px;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;
+  }
+  .selected-toggle input{width:16px;height:16px;}
+  .add-idea-btn{
+    width:100%;border:2px dashed var(--line);background:transparent;border-radius:14px;
+    padding:12px;font-weight:800;color:var(--ink-soft);cursor:pointer;font-family:inherit;font-size:13px;
+  }
+
+  .exec-checklist{background:var(--white);border-radius:16px;padding:14px;box-shadow:var(--shadow);}
+  .exec-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--paper-dim);}
+  .exec-item:last-child{border-bottom:none;}
+  .exec-item input{width:18px;height:18px;flex-shrink:0;}
+  .exec-item .et-title{font-size:13px;font-weight:700;}
+  .exec-item .et-date{font-size:11px;color:var(--ink-soft);}
+  .exec-item.done .et-title{text-decoration:line-through;color:var(--ink-soft);}
+
+  .cube-grid-card{background:var(--white);border-radius:16px;padding:14px;box-shadow:var(--shadow);}
+  .cube-grid-sub{font-size:12px;color:var(--ink-soft);margin-bottom:10px;font-weight:700;}
+  .cube-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;}
+  .cube-cell{
+    aspect-ratio:1;border-radius:5px;background:var(--paper-dim);
+    display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--ink-soft);
+    cursor:pointer;font-weight:700;
+  }
+  .cube-cell.done{background:var(--gold);color:white;}
+  .cube-cell.future{opacity:.35;cursor:default;}
+
+  .freelog-hint{
+    background:var(--fire-soft);border-radius:14px;padding:12px 14px;font-size:12.5px;
+    color:#8a4a30;line-height:1.5;margin-bottom:10px;
+  }
+  .log-card{background:var(--white);border-radius:16px;padding:14px;margin-bottom:10px;box-shadow:var(--shadow);}
+  .log-card .log-top{display:flex;gap:8px;margin-bottom:8px;}
+  .log-card input[type=text]{
+    flex:1;border:none;font-size:13.5px;font-weight:700;font-family:inherit;
+    border-bottom:2px solid var(--paper-dim);padding-bottom:6px;background:transparent;
+  }
+  .log-card input[type=text]:focus{outline:none;border-color:var(--fire);}
+  .log-card input[type=date]{
+    border:1px solid var(--line);border-radius:8px;padding:5px 7px;font-family:inherit;font-size:11.5px;
+    color:var(--ink-soft);
+  }
+  .log-card textarea{
+    width:100%;border:1px solid var(--line);border-radius:10px;padding:8px;font-family:inherit;
+    font-size:12.5px;min-height:44px;resize:vertical;
+  }
+  .log-del{
+    border:none;background:transparent;color:#cfc4ac;font-size:16px;cursor:pointer;flex-shrink:0;
+    padding:0 4px;
+  }
+  .log-del:hover{color:var(--fire);}
+
+  /* misc */
+  .section-gap{height:6px;}
+  .help-text{font-size:11.5px;color:var(--ink-soft);text-align:center;margin-top:10px;line-height:1.5;}
+  .legend{display:flex;gap:10px;flex-wrap:wrap;font-size:11px;color:var(--ink-soft);margin-bottom:10px;justify-content:center;}
+  .legend span{display:flex;align-items:center;gap:4px;}
+  .legend i{width:9px;height:9px;border-radius:50%;display:inline-block;}
+
+  @media (max-width:480px){
+    .brand h1{font-size:16px;}
+    .tab-btn{padding:7px 10px;font-size:12px;}
+    .gauge-wrap{width:140px;height:140px;}
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-mark">🔥</div>
+      <div>
+        <h1 class="display">暑假任務站</h1>
+        <p>2026/7/1 – 8/30</p>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" data-view="today">今日</button>
+      <button class="tab-btn" data-view="week">總覽</button>
+      <button class="tab-btn" data-view="bg39">暑假作業</button>
+    </div>
+  </div>
+
+  <!-- TODAY VIEW -->
+  <div class="view active" id="view-today">
+    <div class="date-nav">
+      <button id="prevDay">‹</button>
+      <div class="date-label">
+        <div class="big" id="todayBig">7/6 (一)</div>
+        <div class="small" id="todaySmall">第 1 天</div>
+        <div class="daytype-pill" id="dayTypePill">營隊日</div>
+      </div>
+      <button id="nextDay">›</button>
+    </div>
+
+    <div class="gauge-card">
+      <div class="gauge-wrap">
+        <svg viewBox="0 0 160 160" width="160" height="160">
+          <circle cx="80" cy="80" r="68" fill="none" stroke="#F0E6D2" stroke-width="14"/>
+          <circle id="gaugeArc" cx="80" cy="80" r="68" fill="none" stroke="#E8633D" stroke-width="14"
+            stroke-linecap="round" stroke-dasharray="427" stroke-dashoffset="427"
+            transform="rotate(-90 80 80)"/>
+        </svg>
+        <div class="gauge-center">
+          <div class="mins" id="gaugeMins">0</div>
+          <div class="label">分鐘電動時間</div>
+        </div>
+      </div>
+      <div class="gauge-sub" id="gaugeSub">完成下方任務來累積時間</div>
+      <div class="streak-bar" id="streakBar"></div>
+    </div>
+
+    <div class="task-section-title">✅ 今日自學任務（每樣完成可加時間）</div>
+    <div class="task-list" id="taskList"></div>
+
+    <div class="cube-card" id="cubeCard">
+      <div class="cube-row">
+        <div class="cube-icon">🧩</div>
+        <div class="cube-text">
+          <div class="t-title">魔術方塊每日練習</div>
+          <div class="t-sub">8/30比賽前，目標每天都練習</div>
+        </div>
+        <div class="task-mins" style="color:#8a6a00;">+5分</div>
+        <div class="task-check" id="cubeCheck"></div>
+      </div>
+    </div>
+
+    <div class="freeform-box" id="bonusBox" style="display:none;">
+      <label>📝 今天看了什麼／做了什麼？(可選填，留個紀錄)</label>
+      <textarea id="bonusNote" placeholder="例如：看了一段世界歷史影片，講埃及金字塔..."></textarea>
+    </div>
+
+    <div class="help-text">點任務卡片打勾完成。電動時間隔天會重新計算，不會累積。</div>
+  </div>
+
+  <!-- WEEK VIEW -->
+  <div class="view" id="view-week">
+    <div class="legend">
+      <span><i style="background:var(--fire)"></i>HM夏令營</span>
+      <span><i style="background:var(--grape)"></i>自理／自學週</span>
+      <span><i style="background:var(--teal)"></i>日本旅遊</span>
+      <span><i style="background:var(--gold)"></i>BG39 重要日</span>
+    </div>
+    <div id="weekContainer"></div>
+  </div>
+
+  <!-- HOMEWORK VIEW -->
+  <div class="view" id="view-bg39">
+    <div class="bg39-hero">
+      <h2 class="display">🏆 BG39 IEYI 發明獎</h2>
+      <p>7月：多觀察、多發想，和媽媽討論思辨 → 選出 3 個方向<br>8月：挑 1 個做出來，8/30 前完成（越早越好）</p>
+      <div class="deadline-track">
+        <div class="dl-stage" id="dlStage1"><div class="dl-date">7/1–7/19</div><div class="dl-name">發想期</div></div>
+        <div class="dl-stage" id="dlStage2"><div class="dl-date">7/20–7/27</div><div class="dl-name">收斂選定</div></div>
+        <div class="dl-stage" id="dlStage3"><div class="dl-date">7/28–8/24</div><div class="dl-name">執行製作</div></div>
+        <div class="dl-stage" id="dlStage4"><div class="dl-date">8/25–8/30</div><div class="dl-name">完稿繳交</div></div>
+      </div>
+    </div>
+
+    <div class="task-section-title">💡 創意發想清單（目標：每週至少 2–3 個）</div>
+    <div id="ideaList"></div>
+    <button class="add-idea-btn" id="addIdeaBtn">+ 新增一個發明點子</button>
+
+    <div class="section-gap"></div>
+    <div class="task-section-title">📋 執行進度追蹤（8月最終選定的那一個）</div>
+    <div class="exec-checklist" id="execChecklist"></div>
+
+    <div class="section-gap"></div>
+    <div class="task-section-title">🧩 魔術方塊 8/30 比賽倒數</div>
+    <div class="cube-grid-card">
+      <div class="cube-grid-sub" id="cubeStreakSummary">統計中...</div>
+      <div class="cube-grid" id="cubeGrid"></div>
+    </div>
+
+    <div class="section-gap"></div>
+    <div class="task-section-title">📚 自主學習作業紀錄（原班）</div>
+    <div class="freelog-hint">提醒：這項作業還沒交，找時間記錄一下～可以是旅遊紀錄、魔方學習心得、自己做的AI APP、營隊成果，或任何想分享的發想，不限形式。</div>
+    <div id="freelogList"></div>
+    <button class="add-idea-btn" id="addLogBtn">+ 新增一筆紀錄</button>
+  </div>
+
+</div>
+
+<script>
+/* ===================== DATA MODEL ===================== */
+
+// Build full date range 7/1 - 8/30 with day-type classification
+function buildCalendar(){
+  const days = [];
+  const start = new Date(2026,6,1); // July 1
+  const end = new Date(2026,7,30);  // Aug 30
+  const camp1 = ['7/6','7/7','7/8','7/9','7/10'];
+  const camp2 = ['7/13','7/14','7/15','7/16','7/17'];
+  const taichungCamp = ['7/20','7/21','7/22','7/23','7/24'];
+  const taichungSelf = ['7/27','7/28','7/29','7/30','7/31'];
+  const japan = ['8/4','8/5','8/6','8/7','8/8','8/9','8/10'];
+  const lfh = ['8/3','8/11','8/12','8/13','8/14'];
+  const camp3 = ['8/17','8/18','8/19','8/20','8/21'];
+  const camp4 = ['8/24','8/25','8/26','8/27','8/28'];
+  const beforeCamp = ['7/1','7/2','7/3']; // Happy Marian per sheet
+
+  const notes = {
+    '7/1':'Happy Marian','7/2':'Happy Marian','7/3':'Happy Marian',
+    '7/6':'HM Summer Camp 開始週',
+    '7/13':'HM Summer Camp',
+    '7/20':'倍思科學實驗室「極速爆彈魔軌營」',
+    '7/27':'台中-行程未訂',
+    '8/4':'日本旅遊出發 (大阪／高山／上高地／名古屋)',
+    '8/10':'日本旅遊返台',
+    '8/17':'HM Summer Camp',
+    '8/24':'HM Summer Camp'
+  };
+
+  let d = new Date(start);
+  let dayNum = 1;
+  while(d <= end){
+    const key = (d.getMonth()+1)+'/'+d.getDate();
+    let type = 'free'; // free self-directed weekday
+    const wd = d.getDay(); // 0 sun .. 6 sat
+    if(wd===0 || wd===6) type='weekend';
+    if(camp1.includes(key)||camp2.includes(key)||camp3.includes(key)||camp4.includes(key)) type='camp';
+    if(taichungCamp.includes(key)) type='taichung_camp';
+    if(taichungSelf.includes(key)) type='taichung_self';
+    if(japan.includes(key)) type='japan';
+    if(lfh.includes(key)) type='lfh';
+    if(beforeCamp.includes(key)) type='precamp';
+
+    days.push({
+      key, date:new Date(d), dayNum,
+      weekday:['日','一','二','三','四','五','六'][wd],
+      type, note: notes[key]||null
+    });
+    d.setDate(d.getDate()+1);
+    dayNum++;
+  }
+  return days;
+}
+const CAL = buildCalendar();
+
+// Group into weeks (Mon-start) for week view
+function buildWeeks(){
+  const weeks = [];
+  let current = [];
+  CAL.forEach((day,i)=>{
+    current.push(day);
+    if(day.weekday==='日' || i===CAL.length-1){
+      weeks.push(current);
+      current=[];
+    }
+  });
+  return weeks;
+}
+const WEEKS = buildWeeks();
+
+const TYPE_LABEL = {
+  camp:{label:'營隊日', cls:'pill-camp'},
+  taichung_camp:{label:'科學營(台中)', cls:'pill-camp'},
+  taichung_self:{label:'台中自理週', cls:'pill-self'},
+  japan:{label:'日本旅遊', cls:'pill-travel'},
+  lfh:{label:'LFH 跟辦公室', cls:'pill-self'},
+  free:{label:'自理日', cls:'pill-self'},
+  weekend:{label:'週末', cls:'pill-weekend'},
+  precamp:{label:'營隊前', cls:'pill-self'}
+};
+
+// Daily self-study task bank, tuned per day type
+function getTasksForDay(day){
+  const base = [
+    {id:'social', title:'社會：最有畫面感的歷史課', sub:'看一段台灣Bar歷史影片或相關內容', mins:10},
+    {id:'english', title:'語文時事：World Explorer 或看書', sub:'讀一篇新聞抓重點查生字，或讀中英文書籍', mins:15},
+    {id:'math', title:'數學：數感課程包 / G5數學', sub:'一個單元或一份練習', mins:10},
+    {id:'code', title:'程式與AI：Claude Code 做遊戲/APP', sub:'寫一點、改一點、玩一點都算', mins:10},
+    {id:'sport', title:'運動：跳繩或其他', sub:'跳繩、球類、騎車等身體活動都可以', mins:5}
+  ];
+  if(day.type==='japan'){
+    return [
+      {id:'journal', title:'旅遊日記', sub:'寫/畫今天看到的一件有趣的事', mins:10},
+      {id:'observe', title:'文化觀察', sub:'留意一個跟台灣不一樣的地方，回來分享', mins:5}
+    ];
+  }
+  return base;
+}
+
+/* ===================== STORAGE ===================== */
+const store = {
+  data: {},
+  async load(){
+    try{
+      const r = await window.storage.get('summer-progress-2026');
+      this.data = r ? JSON.parse(r.value) : {};
+    }catch(e){ this.data = {}; }
+  },
+  async save(){
+    try{ await window.storage.set('summer-progress-2026', JSON.stringify(this.data)); }
+    catch(e){ console.error('save failed', e); }
+  },
+  getDay(key){ if(!this.data[key]) this.data[key] = {tasks:{}, note:''}; return this.data[key]; }
+};
+
+const ideaStore = {
+  data: {ideas:[], exec:{}},
+  async load(){
+    try{
+      const r = await window.storage.get('summer-bg39-2026');
+      this.data = r ? JSON.parse(r.value) : {ideas:[], exec:{}};
+    }catch(e){ this.data = {ideas:[], exec:{}}; }
+    if(!this.data.ideas) this.data.ideas=[];
+    if(!this.data.exec) this.data.exec={};
+  },
+  async save(){
+    try{ await window.storage.set('summer-bg39-2026', JSON.stringify(this.data)); }
+    catch(e){ console.error('save failed', e); }
+  }
+};
+
+const logStore = {
+  data: {entries:[]},
+  async load(){
+    try{
+      const r = await window.storage.get('summer-freelog-2026');
+      this.data = r ? JSON.parse(r.value) : {entries:[]};
+    }catch(e){ this.data = {entries:[]}; }
+    if(!this.data.entries) this.data.entries=[];
+  },
+  async save(){
+    try{ await window.storage.set('summer-freelog-2026', JSON.stringify(this.data)); }
+    catch(e){ console.error('save failed', e); }
+  }
+};
+
+/* ===================== STATE ===================== */
+let currentIdx = CAL.findIndex(d=>d.key==='7/6'); // default to camp start
+const today = new Date();
+const todayKey = (today.getMonth()+1)+'/'+today.getDate();
+const todayIdx = CAL.findIndex(d=>d.key===todayKey && today.getFullYear()===2026);
+if(todayIdx>=0) currentIdx = todayIdx;
+
+/* ===================== RENDER: TODAY ===================== */
+function renderToday(){
+  const day = CAL[currentIdx];
+  const tInfo = TYPE_LABEL[day.type];
+  document.getElementById('todayBig').textContent = day.key+' ('+day.weekday+')';
+  document.getElementById('todaySmall').textContent = '暑假第 '+day.dayNum+' 天'+(day.note?' · '+day.note:'');
+  const pill = document.getElementById('dayTypePill');
+  pill.textContent = tInfo.label;
+  pill.className = 'daytype-pill '+tInfo.cls;
+
+  const tasks = getTasksForDay(day);
+  const dayData = store.getDay(day.key);
+
+  const list = document.getElementById('taskList');
+  list.innerHTML = '';
+  let doneCount=0, totalMins=0, earnedMins=0;
+  tasks.forEach(t=>{
+    const isDone = !!dayData.tasks[t.id];
+    if(isDone){ doneCount++; earnedMins+=t.mins; }
+    totalMins+=t.mins;
+    const el = document.createElement('div');
+    el.className = 'task-item'+(isDone?' done':'');
+    el.innerHTML = `
+      <div class="task-check">${isDone?'✓':''}</div>
+      <div class="task-text">
+        <div class="t-title">${t.title}</div>
+        <div class="t-sub">${t.sub}</div>
+      </div>
+      <div class="task-mins">+${t.mins}分</div>
+    `;
+    el.addEventListener('click', async ()=>{
+      dayData.tasks[t.id] = !dayData.tasks[t.id];
+      await store.save();
+      renderToday();
+    });
+    list.appendChild(el);
+  });
+
+  // gauge — include cube practice (+5 min) as part of total possible/earned time
+  const CUBE_MINS = 5;
+  const cubeDoneForGauge = !!dayData.cube;
+  const gaugeTotalMins = totalMins + CUBE_MINS;
+  const gaugeEarnedMins = earnedMins + (cubeDoneForGauge ? CUBE_MINS : 0);
+  const gaugeTotalItems = tasks.length + 1;
+  const gaugeDoneItems = doneCount + (cubeDoneForGauge ? 1 : 0);
+
+  const pct = gaugeTotalMins>0 ? gaugeEarnedMins/gaugeTotalMins : 0;
+  const circumference = 427;
+  document.getElementById('gaugeArc').style.strokeDashoffset = circumference*(1-pct);
+  document.getElementById('gaugeMins').textContent = gaugeEarnedMins;
+  const isWeekend = (day.type==='weekend');
+  document.querySelector('.gauge-center .label').textContent = isWeekend ? '分鐘額外電動時間' : '分鐘電動時間';
+  const sub = document.getElementById('gaugeSub');
+  if(isWeekend){
+    sub.textContent = gaugeDoneItems===gaugeTotalItems && gaugeTotalItems>0
+      ? '🎉 任務全做完了，原本的週末電動時間之外再加碼！'
+      : `週末本來就有電動時間，完成任務還能再多賺 ${gaugeTotalMins} 分鐘 (${gaugeDoneItems}/${gaugeTotalItems})`;
+  } else if(gaugeDoneItems===gaugeTotalItems && gaugeTotalItems>0){
+    sub.textContent = '🎉 今天任務全部完成！可以打電動了';
+  } else {
+    sub.textContent = `完成 ${gaugeDoneItems}/${gaugeTotalItems} 項任務`;
+  }
+
+  // cube practice tracker (every day, independent of unlock-tasks, also adds +5 min)
+  const cubeCard = document.getElementById('cubeCard');
+  const cubeCheck = document.getElementById('cubeCheck');
+  const cubeDone = !!dayData.cube;
+  cubeCard.classList.toggle('done', cubeDone);
+  cubeCheck.textContent = cubeDone ? '✓' : '';
+  cubeCard.onclick = async ()=>{
+    dayData.cube = !dayData.cube;
+    await store.save();
+    renderToday();
+  };
+
+  // bonus note box
+  const bonusBox = document.getElementById('bonusBox');
+  const bonusNote = document.getElementById('bonusNote');
+  bonusBox.style.display = 'block';
+  bonusNote.value = dayData.note || '';
+  bonusNote.oninput = async ()=>{
+    dayData.note = bonusNote.value;
+    await store.save();
+  };
+
+  // streak (last 7 days incl today)
+  const streakBar = document.getElementById('streakBar');
+  streakBar.innerHTML = '';
+  for(let i=6;i>=0;i--){
+    const idx = currentIdx - i;
+    if(idx<0) continue;
+    const dk = CAL[idx].key;
+    const dd = store.data[dk];
+    const tks = getTasksForDay(CAL[idx]);
+    const allDone = dd && tks.length>0 && tks.every(t=>dd.tasks[t.id]);
+    const dot = document.createElement('div');
+    dot.className = 'streak-dot'+(allDone?' on':'');
+    streakBar.appendChild(dot);
+  }
+}
+
+document.getElementById('prevDay').onclick = ()=>{ if(currentIdx>0){currentIdx--; renderToday();} };
+document.getElementById('nextDay').onclick = ()=>{ if(currentIdx<CAL.length-1){currentIdx++; renderToday();} };
+
+/* ===================== RENDER: WEEK ===================== */
+function weekHeadColor(types){
+  if(types.has('japan')) return 'var(--teal)';
+  if(types.has('camp')||types.has('taichung_camp')) return 'var(--fire)';
+  if(types.has('taichung_self')||types.has('lfh')||types.has('free')) return 'var(--grape)';
+  return '#9a9181';
+}
+function renderWeek(){
+  const container = document.getElementById('weekContainer');
+  container.innerHTML = '';
+  WEEKS.forEach(week=>{
+    const types = new Set(week.map(d=>d.type));
+    const block = document.createElement('div');
+    block.className='week-block';
+    const startKey = week[0].key, endKey = week[week.length-1].key;
+    block.innerHTML = `<div class="week-head" style="background:${weekHeadColor(types)}">
+        <span>${startKey} – ${endKey}</span>
+        <span class="wlabel">第${week[0].dayNum}–${week[week.length-1].dayNum}天</span>
+      </div>
+      <div class="week-rows"></div>`;
+    const rows = block.querySelector('.week-rows');
+    week.forEach(day=>{
+      const dayData = store.data[day.key];
+      const tasks = getTasksForDay(day);
+      let statusTxt='—', statusCls='status-none';
+      if(dayData){
+        const doneCount = tasks.filter(t=>dayData.tasks[t.id]).length;
+        if(doneCount===tasks.length && tasks.length>0){statusTxt='完成✓';statusCls='status-done';}
+        else if(doneCount>0){statusTxt=doneCount+'/'+tasks.length;statusCls='status-partial';}
+      }
+      const row = document.createElement('div');
+      row.className='day-row';
+      row.innerHTML = `
+        <div class="day-date">${day.key}(${day.weekday})</div>
+        <div class="day-note">${TYPE_LABEL[day.type].label}${day.note?'<div class="sub">'+day.note+'</div>':''}</div>
+        <div class="day-status ${statusCls}">${statusTxt}</div>
+      `;
+      row.addEventListener('click', ()=>{
+        currentIdx = CAL.findIndex(d=>d.key===day.key);
+        renderToday();
+        switchView('today');
+      });
+      rows.appendChild(row);
+    });
+    container.appendChild(block);
+  });
+}
+
+/* ===================== RENDER: BG39 + HOMEWORK ===================== */
+function renderBG39(){
+  // stage highlight based on today's date
+  const stages = [
+    {id:'dlStage1', from:'7/1', to:'7/19'},
+    {id:'dlStage2', from:'7/20', to:'7/27'},
+    {id:'dlStage3', from:'7/28', to:'8/24'},
+    {id:'dlStage4', from:'8/25', to:'8/30'}
+  ];
+  const curKey = CAL[currentIdx].key;
+  const curIdxInCal = currentIdx;
+  stages.forEach(s=>{
+    const el = document.getElementById(s.id);
+    const fromIdx = CAL.findIndex(d=>d.key===s.from);
+    const toIdx = CAL.findIndex(d=>d.key===s.to);
+    el.classList.toggle('active', curIdxInCal>=fromIdx && curIdxInCal<=toIdx);
+  });
+
+  const ideaList = document.getElementById('ideaList');
+  ideaList.innerHTML = '';
+  ideaStore.data.ideas.forEach((idea, i)=>{
+    const card = document.createElement('div');
+    card.className='idea-card';
+    card.innerHTML = `
+      <input type="text" placeholder="點子名稱..." value="${escapeHtml(idea.title||'')}" data-i="${i}" data-f="title">
+      <textarea placeholder="這個點子要解決什麼問題？怎麼做？和媽媽討論了什麼？" data-i="${i}" data-f="desc">${escapeHtml(idea.desc||'')}</textarea>
+      <div class="idea-rating">
+        <span>有趣程度</span>
+        <div class="star-row" data-i="${i}">
+          ${[1,2,3,4,5].map(n=>`<span class="star ${n<=(idea.rating||0)?'filled':''}" data-n="${n}">★</span>`).join('')}
+        </div>
+      </div>
+      <div class="selected-toggle">
+        <input type="checkbox" data-i="${i}" data-f="selected" ${idea.selected?'checked':''}>
+        <span>列入最終 3 選</span>
+      </div>
+    `;
+    ideaList.appendChild(card);
+  });
+
+  ideaList.querySelectorAll('input[type=text], textarea').forEach(inp=>{
+    inp.addEventListener('input', async (e)=>{
+      const i = +e.target.dataset.i, f = e.target.dataset.f;
+      ideaStore.data.ideas[i][f] = e.target.value;
+      await ideaStore.save();
+    });
+  });
+  ideaList.querySelectorAll('input[type=checkbox]').forEach(inp=>{
+    inp.addEventListener('change', async (e)=>{
+      const i = +e.target.dataset.i;
+      ideaStore.data.ideas[i].selected = e.target.checked;
+      await ideaStore.save();
+    });
+  });
+  ideaList.querySelectorAll('.star-row').forEach(row=>{
+    row.querySelectorAll('.star').forEach(star=>{
+      star.addEventListener('click', async (e)=>{
+        const i = +row.dataset.i, n = +e.target.dataset.n;
+        ideaStore.data.ideas[i].rating = n;
+        await ideaStore.save();
+        renderBG39();
+      });
+    });
+  });
+
+  // exec checklist
+  const execSteps = [
+    {id:'pick', title:'從3個點子中選定1個要執行的', date:'目標：7/27前'},
+    {id:'plan', title:'列出需要的材料/工具清單', date:'8月第1週'},
+    {id:'build1', title:'動手做第一個版本（雛形）', date:'8月第1–2週'},
+    {id:'test', title:'測試並請媽媽/家人給意見', date:'8月第2–3週'},
+    {id:'improve', title:'根據意見修改、完善', date:'8月第3週'},
+    {id:'present', title:'準備說明（這是什麼問題、怎麼解決）', date:'8月第4週'},
+    {id:'final', title:'最終完稿，存好照片/影片紀錄', date:'8/30前(越早越好)'}
+  ];
+  const execEl = document.getElementById('execChecklist');
+  execEl.innerHTML = '';
+  execSteps.forEach(s=>{
+    const isDone = !!ideaStore.data.exec[s.id];
+    const item = document.createElement('div');
+    item.className = 'exec-item'+(isDone?' done':'');
+    item.innerHTML = `
+      <input type="checkbox" ${isDone?'checked':''} data-id="${s.id}">
+      <div style="flex:1">
+        <div class="et-title">${s.title}</div>
+        <div class="et-date">${s.date}</div>
+      </div>
+    `;
+    item.querySelector('input').addEventListener('change', async (e)=>{
+      ideaStore.data.exec[s.id] = e.target.checked;
+      await ideaStore.save();
+      renderBG39();
+    });
+    execEl.appendChild(item);
+  });
+
+  // cube practice grid (7/1 - 8/30, full summer, since competition is 8/30)
+  const cubeGrid = document.getElementById('cubeGrid');
+  cubeGrid.innerHTML = '';
+  let cubeDoneCount=0, cubeElapsedCount=0;
+  CAL.forEach((day, idx)=>{
+    const dd = store.data[day.key];
+    const done = !!(dd && dd.cube);
+    const isFuture = idx > currentIdx;
+    if(!isFuture){ cubeElapsedCount++; if(done) cubeDoneCount++; }
+    const cell = document.createElement('div');
+    cell.className = 'cube-cell'+(done?' done':'')+(isFuture?' future':'');
+    cell.textContent = day.date.getDate();
+    cell.title = day.key+(done?' 已練習':'');
+    if(!isFuture){
+      cell.addEventListener('click', async ()=>{
+        const target = store.getDay(day.key);
+        target.cube = !target.cube;
+        await store.save();
+        renderBG39();
+        if(idx===currentIdx) renderToday();
+      });
+    }
+    cubeGrid.appendChild(cell);
+  });
+  const pct = cubeElapsedCount>0 ? Math.round(100*cubeDoneCount/cubeElapsedCount) : 0;
+  document.getElementById('cubeStreakSummary').textContent =
+    `到今天為止已練習 ${cubeDoneCount}/${cubeElapsedCount} 天 (${pct}%) · 點格子可補登/取消`;
+
+  // free-form learning log
+  const freelogList = document.getElementById('freelogList');
+  freelogList.innerHTML = '';
+  logStore.data.entries.forEach((entry, i)=>{
+    const card = document.createElement('div');
+    card.className='log-card';
+    card.innerHTML = `
+      <div class="log-top">
+        <input type="text" placeholder="這次紀錄的主題..." value="${escapeHtml(entry.title||'')}" data-i="${i}" data-f="title">
+        <input type="date" value="${entry.date||''}" data-i="${i}" data-f="date">
+        <button class="log-del" data-i="${i}">✕</button>
+      </div>
+      <textarea placeholder="寫一點點就好：做了什麼、學到什麼、有什麼感想..." data-i="${i}" data-f="desc">${escapeHtml(entry.desc||'')}</textarea>
+    `;
+    freelogList.appendChild(card);
+  });
+  freelogList.querySelectorAll('input[type=text], input[type=date], textarea').forEach(inp=>{
+    inp.addEventListener('input', async (e)=>{
+      const i = +e.target.dataset.i, f = e.target.dataset.f;
+      logStore.data.entries[i][f] = e.target.value;
+      await logStore.save();
+    });
+  });
+  freelogList.querySelectorAll('.log-del').forEach(btn=>{
+    btn.addEventListener('click', async (e)=>{
+      const i = +e.target.dataset.i;
+      logStore.data.entries.splice(i,1);
+      await logStore.save();
+      renderBG39();
+    });
+  });
+}
+function escapeHtml(s){
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+document.getElementById('addIdeaBtn').addEventListener('click', async ()=>{
+  ideaStore.data.ideas.push({title:'', desc:'', rating:0, selected:false});
+  await ideaStore.save();
+  renderBG39();
+});
+
+document.getElementById('addLogBtn').addEventListener('click', async ()=>{
+  logStore.data.entries.push({title:'', date:'', desc:''});
+  await logStore.save();
+  renderBG39();
+});
+
+/* ===================== VIEW SWITCH ===================== */
+function switchView(name){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  document.querySelector(`.tab-btn[data-view="${name}"]`).classList.add('active');
+}
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>switchView(btn.dataset.view));
+});
+
+/* ===================== INIT ===================== */
+async function init(){
+  await store.load();
+  await ideaStore.load();
+  await logStore.load();
+  renderToday();
+  renderWeek();
+  renderBG39();
+}
+init();
+</script>
+</body>
+</html>

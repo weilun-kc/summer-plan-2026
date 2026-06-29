@@ -570,17 +570,28 @@ function getTasksForDay(day){
 }
 
 /* ===================== STORAGE ===================== */
+// Uses browser localStorage so progress persists on any device/browser this
+// page is opened in — including once deployed standalone (e.g. GitHub Pages),
+// not just inside Claude's artifact preview.
+function localGet(key){
+  try{
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : null;
+  }catch(e){ console.error('localStorage read failed', e); return null; }
+}
+function localSet(key, value){
+  try{ localStorage.setItem(key, JSON.stringify(value)); return true; }
+  catch(e){ console.error('localStorage write failed', e); return false; }
+}
+
 const store = {
   data: {},
   async load(){
-    try{
-      const r = await window.storage.get('summer-progress-2026');
-      this.data = r ? JSON.parse(r.value) : {};
-    }catch(e){ this.data = {}; }
+    const r = localGet('summer-progress-2026');
+    this.data = r || {};
   },
   async save(){
-    try{ await window.storage.set('summer-progress-2026', JSON.stringify(this.data)); }
-    catch(e){ console.error('save failed', e); }
+    localSet('summer-progress-2026', this.data);
   },
   getDay(key){ if(!this.data[key]) this.data[key] = {tasks:{}, note:''}; return this.data[key]; }
 };
@@ -588,31 +599,25 @@ const store = {
 const ideaStore = {
   data: {ideas:[], exec:{}},
   async load(){
-    try{
-      const r = await window.storage.get('summer-bg39-2026');
-      this.data = r ? JSON.parse(r.value) : {ideas:[], exec:{}};
-    }catch(e){ this.data = {ideas:[], exec:{}}; }
+    const r = localGet('summer-bg39-2026');
+    this.data = r || {ideas:[], exec:{}};
     if(!this.data.ideas) this.data.ideas=[];
     if(!this.data.exec) this.data.exec={};
   },
   async save(){
-    try{ await window.storage.set('summer-bg39-2026', JSON.stringify(this.data)); }
-    catch(e){ console.error('save failed', e); }
+    localSet('summer-bg39-2026', this.data);
   }
 };
 
 const logStore = {
   data: {entries:[]},
   async load(){
-    try{
-      const r = await window.storage.get('summer-freelog-2026');
-      this.data = r ? JSON.parse(r.value) : {entries:[]};
-    }catch(e){ this.data = {entries:[]}; }
+    const r = localGet('summer-freelog-2026');
+    this.data = r || {entries:[]};
     if(!this.data.entries) this.data.entries=[];
   },
   async save(){
-    try{ await window.storage.set('summer-freelog-2026', JSON.stringify(this.data)); }
-    catch(e){ console.error('save failed', e); }
+    localSet('summer-freelog-2026', this.data);
   }
 };
 
@@ -621,15 +626,12 @@ const logStore = {
 const ledgerStore = {
   data: {withdrawals:[]}, // [{ts, mins}]
   async load(){
-    try{
-      const r = await window.storage.get('summer-ledger-2026');
-      this.data = r ? JSON.parse(r.value) : {withdrawals:[]};
-    }catch(e){ this.data = {withdrawals:[]}; }
+    const r = localGet('summer-ledger-2026');
+    this.data = r || {withdrawals:[]};
     if(!this.data.withdrawals) this.data.withdrawals=[];
   },
   async save(){
-    try{ await window.storage.set('summer-ledger-2026', JSON.stringify(this.data)); }
-    catch(e){ console.error('save failed', e); }
+    localSet('summer-ledger-2026', this.data);
   }
 };
 

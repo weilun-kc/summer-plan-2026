@@ -219,17 +219,6 @@
   .exec-item .et-date{font-size:11px;color:var(--ink-soft);}
   .exec-item.done .et-title{text-decoration:line-through;color:var(--ink-soft);}
 
-  .cube-grid-card{background:var(--white);border-radius:16px;padding:14px;box-shadow:var(--shadow);}
-  .cube-grid-sub{font-size:12px;color:var(--ink-soft);margin-bottom:10px;font-weight:700;}
-  .cube-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;}
-  .cube-cell{
-    aspect-ratio:1;border-radius:5px;background:var(--paper-dim);
-    display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--ink-soft);
-    cursor:pointer;font-weight:700;
-  }
-  .cube-cell.done{background:var(--gold);color:white;}
-  .cube-cell.future{opacity:.35;cursor:default;}
-
   .freelog-hint{
     background:var(--fire-soft);border-radius:14px;padding:12px 14px;font-size:12.5px;
     color:#8a4a30;line-height:1.5;margin-bottom:10px;
@@ -262,6 +251,77 @@
   .legend span{display:flex;align-items:center;gap:4px;}
   .legend i{width:9px;height:9px;border-radius:50%;display:inline-block;}
 
+  /* ===== LEDGER VIEW ===== */
+  .balance-card{
+    background:linear-gradient(135deg,var(--fire),#c44a28);color:white;
+    border-radius:22px;padding:22px;text-align:center;margin-bottom:14px;
+  }
+  .balance-label{font-size:12px;opacity:.9;font-weight:700;}
+  .balance-amount{margin:4px 0;font-family:'Baloo 2','Arial Rounded MT Bold',sans-serif;}
+  .balance-amount #balanceMins{font-size:42px;font-weight:800;}
+  .balance-amount .balance-unit{font-size:14px;font-weight:700;margin-left:4px;opacity:.9;}
+  .balance-sub{font-size:11.5px;opacity:.85;}
+
+  .use-card{
+    background:var(--white);border-radius:18px;padding:16px;margin-bottom:16px;box-shadow:var(--shadow);
+  }
+  .use-card label{font-size:13px;font-weight:800;display:block;margin-bottom:8px;}
+  .use-row{display:flex;gap:8px;}
+  .use-row input{
+    flex:1;border:1.5px solid var(--line);border-radius:10px;padding:9px 12px;
+    font-family:inherit;font-size:15px;font-weight:700;color:var(--ink);
+  }
+  .use-row input:focus{outline:none;border-color:var(--fire);}
+  .use-row button{
+    border:none;background:var(--fire);color:white;border-radius:10px;padding:9px 18px;
+    font-weight:800;font-size:14px;cursor:pointer;font-family:inherit;white-space:nowrap;
+  }
+  .use-row button:active{transform:scale(0.97);}
+  .use-quick{display:flex;gap:6px;margin-top:8px;}
+  .quick-btn{
+    flex:1;border:1.5px solid var(--paper-dim);background:var(--paper-dim);border-radius:8px;
+    padding:6px;font-size:12px;font-weight:700;color:var(--ink-soft);cursor:pointer;font-family:inherit;
+  }
+  .quick-btn:hover{border-color:var(--fire);}
+  .use-msg-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;min-height:24px;}
+  .use-msg{font-size:12px;font-weight:700;flex:1;}
+  .use-msg.error{color:var(--fire);}
+  .use-msg.success{color:var(--teal);}
+  .undo-btn{
+    border:1.5px solid var(--line);background:var(--white);border-radius:8px;
+    padding:5px 10px;font-size:11.5px;font-weight:700;color:var(--ink-soft);
+    cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0;
+  }
+  .undo-btn:hover{border-color:var(--fire);color:var(--fire);}
+
+  .ledger-row{
+    background:var(--white);border-radius:14px;padding:12px 14px;margin-bottom:8px;
+    box-shadow:var(--shadow);display:flex;align-items:center;gap:12px;
+  }
+  .ledger-row.spend-row{background:var(--paper-dim);}
+  .ledger-del{
+    border:none;background:transparent;color:#cfc4ac;font-size:14px;cursor:pointer;
+    flex-shrink:0;padding:4px;
+  }
+  .ledger-del:hover{color:var(--fire);}
+  .ledger-icon{
+    width:34px;height:34px;border-radius:10px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;font-size:16px;
+  }
+  .ledger-row.earn-row .ledger-icon{background:var(--fire-soft);}
+  .ledger-row.spend-row .ledger-icon{background:#e2dccb;}
+  .ledger-info{flex:1;}
+  .ledger-date{font-size:12px;font-weight:800;color:var(--ink-soft);}
+  .ledger-detail{font-size:11.5px;color:var(--ink-soft);margin-top:1px;}
+  .ledger-mins{font-size:15px;font-weight:800;white-space:nowrap;position:relative;}
+  .ledger-mins .full{color:var(--ink-soft);}
+  .ledger-mins .struck{
+    text-decoration:line-through;text-decoration-thickness:2px;text-decoration-color:var(--fire);
+    opacity:.55;
+  }
+  .ledger-mins .remain{color:var(--teal);}
+  .ledger-empty{text-align:center;color:var(--ink-soft);font-size:13px;padding:30px 0;}
+
   @media (max-width:480px){
     .brand h1{font-size:16px;}
     .tab-btn{padding:7px 10px;font-size:12px;}
@@ -283,6 +343,7 @@
     <div class="tabs">
       <button class="tab-btn active" data-view="today">今日</button>
       <button class="tab-btn" data-view="week">總覽</button>
+      <button class="tab-btn" data-view="ledger">電動存摺</button>
       <button class="tab-btn" data-view="bg39">暑假作業</button>
     </div>
   </div>
@@ -345,9 +406,37 @@
       <span><i style="background:var(--fire)"></i>HM夏令營</span>
       <span><i style="background:var(--grape)"></i>自理／自學週</span>
       <span><i style="background:var(--teal)"></i>日本旅遊</span>
-      <span><i style="background:var(--gold)"></i>BG39 重要日</span>
     </div>
     <div id="weekContainer"></div>
+  </div>
+
+  <!-- LEDGER VIEW -->
+  <div class="view" id="view-ledger">
+    <div class="balance-card">
+      <div class="balance-label">目前可用電動時間</div>
+      <div class="balance-amount"><span id="balanceMins">0</span><span class="balance-unit">分鐘</span></div>
+      <div class="balance-sub" id="balanceSub">每天賺到的分鐘沒用完都會留著，舊的先用</div>
+    </div>
+
+    <div class="use-card">
+      <label>📱 今天用了多少分鐘？</label>
+      <div class="use-row">
+        <input type="number" id="useAmount" placeholder="例如 30" min="1">
+        <button id="useBtn">扣除</button>
+      </div>
+      <div class="use-quick">
+        <button class="quick-btn" data-mins="15">15分</button>
+        <button class="quick-btn" data-mins="30">30分</button>
+        <button class="quick-btn" data-mins="60">60分</button>
+      </div>
+      <div class="use-msg-row">
+        <div class="use-msg" id="useMsg"></div>
+        <button class="undo-btn" id="undoBtn" style="display:none;">↩️ 復原上一筆</button>
+      </div>
+    </div>
+
+    <div class="task-section-title">📖 存摺紀錄（最新在上面）</div>
+    <div id="ledgerList"></div>
   </div>
 
   <!-- HOMEWORK VIEW -->
@@ -370,13 +459,6 @@
     <div class="section-gap"></div>
     <div class="task-section-title">📋 執行進度追蹤（8月最終選定的那一個）</div>
     <div class="exec-checklist" id="execChecklist"></div>
-
-    <div class="section-gap"></div>
-    <div class="task-section-title">🧩 魔術方塊 8/30 比賽倒數</div>
-    <div class="cube-grid-card">
-      <div class="cube-grid-sub" id="cubeStreakSummary">統計中...</div>
-      <div class="cube-grid" id="cubeGrid"></div>
-    </div>
 
     <div class="section-gap"></div>
     <div class="task-section-title">📚 自主學習作業紀錄（原班）</div>
@@ -463,7 +545,7 @@ const TYPE_LABEL = {
   taichung_camp:{label:'科學營(台中)', cls:'pill-camp'},
   taichung_self:{label:'台中自理週', cls:'pill-self'},
   japan:{label:'日本旅遊', cls:'pill-travel'},
-  lfh:{label:'LFH 跟辦公室', cls:'pill-self'},
+  lfh:{label:'LFH', cls:'pill-self'},
   free:{label:'自理日', cls:'pill-self'},
   weekend:{label:'週末', cls:'pill-weekend'},
   precamp:{label:'營隊前', cls:'pill-self'}
@@ -534,6 +616,55 @@ const logStore = {
   }
 };
 
+// Ledger: tracks "withdrawals" (screen time used). Earned minutes are
+// derived from store.data (tasks + cube) so there's one source of truth.
+const ledgerStore = {
+  data: {withdrawals:[]}, // [{ts, mins}]
+  async load(){
+    try{
+      const r = await window.storage.get('summer-ledger-2026');
+      this.data = r ? JSON.parse(r.value) : {withdrawals:[]};
+    }catch(e){ this.data = {withdrawals:[]}; }
+    if(!this.data.withdrawals) this.data.withdrawals=[];
+  },
+  async save(){
+    try{ await window.storage.set('summer-ledger-2026', JSON.stringify(this.data)); }
+    catch(e){ console.error('save failed', e); }
+  }
+};
+
+// Compute minutes earned on a given day from tasks + cube (mirrors gauge logic in renderToday)
+function earnedMinsForDay(day){
+  const dd = store.data[day.key];
+  if(!dd) return 0;
+  const tasks = getTasksForDay(day);
+  let mins = 0;
+  tasks.forEach(t=>{ if(dd.tasks && dd.tasks[t.id]) mins += t.mins; });
+  if(dd.cube) mins += 5;
+  return mins;
+}
+
+// Build FIFO deposit ledger: each day with earnings > 0 becomes a deposit.
+// Total withdrawn is applied oldest-first, marking each deposit's spent amount.
+function buildDeposits(){
+  const deposits = [];
+  CAL.forEach(day=>{
+    const earned = earnedMinsForDay(day);
+    if(earned>0) deposits.push({key:day.key, weekday:day.weekday, earned, spent:0});
+  });
+  let totalWithdrawn = ledgerStore.data.withdrawals.reduce((s,w)=>s+w.mins,0);
+  for(const dep of deposits){
+    if(totalWithdrawn<=0) break;
+    const take = Math.min(dep.earned, totalWithdrawn);
+    dep.spent = take;
+    totalWithdrawn -= take;
+  }
+  return deposits;
+}
+function totalEarned(){ return buildDeposits().reduce((s,d)=>s+d.earned,0); }
+function totalSpent(){ return ledgerStore.data.withdrawals.reduce((s,w)=>s+w.mins,0); }
+function currentBalance(){ return Math.max(0, totalEarned()-totalSpent()); }
+
 /* ===================== STATE ===================== */
 let currentIdx = CAL.findIndex(d=>d.key==='7/6'); // default to camp start
 const today = new Date();
@@ -591,17 +722,12 @@ function renderToday(){
   const circumference = 427;
   document.getElementById('gaugeArc').style.strokeDashoffset = circumference*(1-pct);
   document.getElementById('gaugeMins').textContent = gaugeEarnedMins;
-  const isWeekend = (day.type==='weekend');
-  document.querySelector('.gauge-center .label').textContent = isWeekend ? '分鐘額外電動時間' : '分鐘電動時間';
+  document.querySelector('.gauge-center .label').textContent = '分鐘電動時間';
   const sub = document.getElementById('gaugeSub');
-  if(isWeekend){
-    sub.textContent = gaugeDoneItems===gaugeTotalItems && gaugeTotalItems>0
-      ? '🎉 任務全做完了，原本的週末電動時間之外再加碼！'
-      : `週末本來就有電動時間，完成任務還能再多賺 ${gaugeTotalMins} 分鐘 (${gaugeDoneItems}/${gaugeTotalItems})`;
-  } else if(gaugeDoneItems===gaugeTotalItems && gaugeTotalItems>0){
-    sub.textContent = '🎉 今天任務全部完成！可以打電動了';
+  if(gaugeDoneItems===gaugeTotalItems && gaugeTotalItems>0){
+    sub.textContent = `🎉 任務全部完成！已賺到 ${gaugeEarnedMins} 分鐘`;
   } else {
-    sub.textContent = `完成 ${gaugeDoneItems}/${gaugeTotalItems} 項任務`;
+    sub.textContent = `完成 ${gaugeDoneItems}/${gaugeTotalItems} 項任務，已賺到 ${gaugeEarnedMins} 分鐘`;
   }
 
   // cube practice tracker (every day, independent of unlock-tasks, also adds +5 min)
@@ -789,34 +915,6 @@ function renderBG39(){
     execEl.appendChild(item);
   });
 
-  // cube practice grid (7/1 - 8/30, full summer, since competition is 8/30)
-  const cubeGrid = document.getElementById('cubeGrid');
-  cubeGrid.innerHTML = '';
-  let cubeDoneCount=0, cubeElapsedCount=0;
-  CAL.forEach((day, idx)=>{
-    const dd = store.data[day.key];
-    const done = !!(dd && dd.cube);
-    const isFuture = idx > currentIdx;
-    if(!isFuture){ cubeElapsedCount++; if(done) cubeDoneCount++; }
-    const cell = document.createElement('div');
-    cell.className = 'cube-cell'+(done?' done':'')+(isFuture?' future':'');
-    cell.textContent = day.date.getDate();
-    cell.title = day.key+(done?' 已練習':'');
-    if(!isFuture){
-      cell.addEventListener('click', async ()=>{
-        const target = store.getDay(day.key);
-        target.cube = !target.cube;
-        await store.save();
-        renderBG39();
-        if(idx===currentIdx) renderToday();
-      });
-    }
-    cubeGrid.appendChild(cell);
-  });
-  const pct = cubeElapsedCount>0 ? Math.round(100*cubeDoneCount/cubeElapsedCount) : 0;
-  document.getElementById('cubeStreakSummary').textContent =
-    `到今天為止已練習 ${cubeDoneCount}/${cubeElapsedCount} 天 (${pct}%) · 點格子可補登/取消`;
-
   // free-form learning log
   const freelogList = document.getElementById('freelogList');
   freelogList.innerHTML = '';
@@ -865,12 +963,137 @@ document.getElementById('addLogBtn').addEventListener('click', async ()=>{
   renderBG39();
 });
 
+/* ===================== RENDER: LEDGER ===================== */
+function renderLedger(){
+  const deposits = buildDeposits();
+  const balance = currentBalance();
+  document.getElementById('balanceMins').textContent = balance;
+
+  // build a combined timeline: deposits (earn) + withdrawals (spend), newest first
+  const timeline = [];
+  deposits.forEach(d=>timeline.push({type:'earn', key:d.key, weekday:d.weekday, earned:d.earned, spent:d.spent, sortKey:CAL.findIndex(c=>c.key===d.key)}));
+  ledgerStore.data.withdrawals.forEach((w,i)=>timeline.push({type:'spend', ts:w.ts, mins:w.mins, sortIdx:i}));
+
+  // sort: earn entries by calendar order, spend entries appended at their recorded time;
+  // simplest robust approach: show two sections — deposits list (calendar order, newest first)
+  // each annotated with strike-through, then a separate compact spend history below.
+  const list = document.getElementById('ledgerList');
+  list.innerHTML = '';
+
+  if(deposits.length===0){
+    list.innerHTML = '<div class="ledger-empty">還沒有任何天數累積電動時間，去完成今日任務吧！</div>';
+    return;
+  }
+
+  // newest deposit day first
+  const sortedDeposits = [...deposits].reverse();
+  sortedDeposits.forEach(d=>{
+    const remain = d.earned - d.spent;
+    const row = document.createElement('div');
+    row.className = 'ledger-row earn-row';
+    let minsHtml;
+    if(d.spent<=0){
+      minsHtml = `<span class="full">+${d.earned}分</span>`;
+    } else if(d.spent>=d.earned){
+      minsHtml = `<span class="struck">+${d.earned}分</span>`;
+    } else {
+      minsHtml = `<span class="struck">${d.spent}分</span> <span class="remain">+${remain}分</span>`;
+    }
+    row.innerHTML = `
+      <div class="ledger-icon">🔥</div>
+      <div class="ledger-info">
+        <div class="ledger-date">${d.key} (${d.weekday})</div>
+        <div class="ledger-detail">${d.spent>0 ? (d.spent>=d.earned?'已全部用完':'部分已使用') : '完整保留，可留到之後用'}</div>
+      </div>
+      <div class="ledger-mins">${minsHtml}</div>
+    `;
+    list.appendChild(row);
+  });
+
+  if(ledgerStore.data.withdrawals.length>0){
+    const divider = document.createElement('div');
+    divider.className = 'task-section-title';
+    divider.style.marginTop = '16px';
+    divider.textContent = '📱 使用紀錄（可點 ✕ 刪除錯誤紀錄）';
+    list.appendChild(divider);
+    // map to original index so delete removes the right entry even after reversing for display
+    const withReversedIdx = ledgerStore.data.withdrawals.map((w,i)=>({...w, idx:i})).reverse();
+    withReversedIdx.forEach(w=>{
+      const dt = new Date(w.ts);
+      const dateStr = `${dt.getMonth()+1}/${dt.getDate()} ${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}`;
+      const row = document.createElement('div');
+      row.className = 'ledger-row spend-row';
+      row.innerHTML = `
+        <div class="ledger-icon">📱</div>
+        <div class="ledger-info">
+          <div class="ledger-date">${dateStr}</div>
+          <div class="ledger-detail">使用電動時間</div>
+        </div>
+        <div class="ledger-mins" style="color:var(--ink-soft);">−${w.mins}分</div>
+        <button class="ledger-del" data-idx="${w.idx}">✕</button>
+      `;
+      list.appendChild(row);
+    });
+    list.querySelectorAll('.ledger-del').forEach(btn=>{
+      btn.addEventListener('click', async (e)=>{
+        const idx = +e.currentTarget.dataset.idx;
+        ledgerStore.data.withdrawals.splice(idx,1);
+        await ledgerStore.save();
+        renderLedger();
+      });
+    });
+  }
+
+  // quick undo button: removes the most recently added withdrawal
+  const undoBtn = document.getElementById('undoBtn');
+  if(ledgerStore.data.withdrawals.length>0){
+    undoBtn.style.display = 'inline-block';
+  } else {
+    undoBtn.style.display = 'none';
+  }
+}
+
+async function undoLastSpend(){
+  if(ledgerStore.data.withdrawals.length===0) return;
+  const removed = ledgerStore.data.withdrawals.pop();
+  await ledgerStore.save();
+  const msg = document.getElementById('useMsg');
+  msg.className='use-msg success';
+  msg.textContent = `已復原：剛剛扣除的 ${removed.mins} 分鐘已還回，目前餘額 ${currentBalance()} 分鐘`;
+  renderLedger();
+}
+document.getElementById('undoBtn').addEventListener('click', undoLastSpend);
+
+async function spendMinutes(mins){
+  const msg = document.getElementById('useMsg');
+  if(!mins || mins<=0){
+    msg.className='use-msg error'; msg.textContent='請輸入大於0的分鐘數'; return;
+  }
+  const balance = currentBalance();
+  if(mins>balance){
+    msg.className='use-msg error'; msg.textContent=`存摺只有 ${balance} 分鐘，不夠扣 ${mins} 分鐘喔`; return;
+  }
+  ledgerStore.data.withdrawals.push({ts:Date.now(), mins});
+  await ledgerStore.save();
+  msg.className='use-msg success'; msg.textContent=`已扣除 ${mins} 分鐘，剩餘 ${currentBalance()} 分鐘`;
+  document.getElementById('useAmount').value='';
+  renderLedger();
+}
+document.getElementById('useBtn').addEventListener('click', ()=>{
+  const val = parseInt(document.getElementById('useAmount').value,10);
+  spendMinutes(val);
+});
+document.querySelectorAll('.quick-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>spendMinutes(parseInt(btn.dataset.mins,10)));
+});
+
 /* ===================== VIEW SWITCH ===================== */
 function switchView(name){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('view-'+name).classList.add('active');
   document.querySelector(`.tab-btn[data-view="${name}"]`).classList.add('active');
+  if(name==='ledger') renderLedger();
 }
 document.querySelectorAll('.tab-btn').forEach(btn=>{
   btn.addEventListener('click', ()=>switchView(btn.dataset.view));
@@ -881,6 +1104,7 @@ async function init(){
   await store.load();
   await ideaStore.load();
   await logStore.load();
+  await ledgerStore.load();
   renderToday();
   renderWeek();
   renderBG39();
